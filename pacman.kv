@@ -1,9 +1,9 @@
 #: kivy 1.7.2
 
-#:set tile_size 28
+#:set tile_size 28.0
 
 <Hero>:
-    size: 28, 28
+    size: tile_size, tile_size
     canvas:
         Color:
             rgb: 1, 1, 0
@@ -15,7 +15,7 @@
             segments: 16
 
 <Ghost>:
-    size: 28, 28
+    size: tile_size, tile_size
     canvas:
         Color:
             rgb: self.color
@@ -51,7 +51,7 @@
 
 
 <StartScreen>:
-    size: 1280, 720 #[FIXME] how to set size when start up?
+    size: 1280, 720
 
     hero: id_hero
     gred: id_red_ghost
