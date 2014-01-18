@@ -35,6 +35,21 @@ class StartScreen(Widget):
         self.tile_w = int(math.floor(self.width / tile_size))
         self.tile_h = int(math.floor(self.height/ tile_size))
 
+        # import window after config.set takes effect
+        from kivy.core.window import Window
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+    def _keyboard_closed(self):
+        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
+    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        if text == ' ':
+            # start the game
+            pass
+        return True
+
     def draw_one_dot(self, left, bottom, is_super):
         dot_size = 4
         if is_super:
@@ -61,8 +76,9 @@ class StartScreen(Widget):
             Color(0.4, 0.4, 0.4)
             Triangle(points=(580, 350, 560, 360, 560, 340))
 
-#    def update(self, dt):
-#        self.draw_border()
+    def update(self, dt=0):
+        self.draw_border()
+        self.draw_arrow()
 
 class PlayScreen(Widget):
     pass
@@ -71,8 +87,7 @@ class PacManApp(App):
 
     def build(self):
         ss = StartScreen()
-        ss.draw_border()
-        ss.draw_arrow()
+        ss.update()
         #Clock.schedule_interval(ss.update, 1 / 60.0)
         return ss
 
