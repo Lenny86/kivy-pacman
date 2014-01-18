@@ -1,9 +1,10 @@
 import math
 from kivy.app import App
 from kivy.uix.widget import Widget
+from kivy.uix.image import Image
 from kivy.properties import NumericProperty, ListProperty, \
         ObjectProperty, ReferenceListProperty
-from kivy.graphics import Color, Ellipse, Rectangle
+from kivy.graphics import Color, Ellipse, Rectangle, Triangle
 from kivy.config import Config
 from kivy.clock import Clock
 
@@ -31,6 +32,8 @@ class StartScreen(Widget):
 
     def __init__(self, **kwargs):
         super(StartScreen, self).__init__(**kwargs)
+        self.tile_w = int(math.floor(self.width / tile_size))
+        self.tile_h = int(math.floor(self.height/ tile_size))
 
     def draw_one_dot(self, left, bottom, is_super):
         dot_size = 4
@@ -44,15 +47,19 @@ class StartScreen(Widget):
             Ellipse(pos = (x, y), size = (dot_size, dot_size))
 
     def draw_border(self):
-        tw = int(math.floor(self.width / tile_size))
-        th = int(math.floor(self.height/ tile_size))
-        superdots = ((0, 0), (0, th - 1), (tw - 1, 0), (tw - 1, th - 1))
-        for x in range(tw):
-            for y in (0, th - 1):
+        superdots = ((0, 0), (0, self.tile_h - 1), (self.tile_w - 1, 0), \
+                (self.tile_w - 1, self.tile_h - 1))
+        for x in range(self.tile_w):
+            for y in (0, self.tile_h - 1):
                 self.draw_one_dot(x, y, (x, y) in superdots)
-        for y in range(th):
-            for x in (0, tw - 1):
+        for y in range(self.tile_h):
+            for x in (0, self.tile_w - 1):
                 self.draw_one_dot(x, y, (x, y) in superdots)
+
+    def draw_arrow(self):
+        with self.canvas:
+            Color(0.4, 0.4, 0.4)
+            Triangle(points=(580, 350, 560, 360, 560, 340))
 
 #    def update(self, dt):
 #        self.draw_border()
@@ -65,6 +72,7 @@ class PacManApp(App):
     def build(self):
         ss = StartScreen()
         ss.draw_border()
+        ss.draw_arrow()
         #Clock.schedule_interval(ss.update, 1 / 60.0)
         return ss
 
