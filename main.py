@@ -5,17 +5,22 @@ from kivy.uix.image import Image
 from kivy.properties import NumericProperty, ListProperty, \
         ObjectProperty, ReferenceListProperty
 from kivy.graphics import Color, Ellipse, Rectangle, Triangle
-from kivy.config import Config
 from kivy.clock import Clock
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager, Screen, WipeTransition
 
 # define again in kv file, search and fix it
 tile_size = 28.0
 
 class Hero(Widget):
+    '''
+    The role controlled by the player
+    '''
     speed = NumericProperty(4)
 
 class Ghost(Widget):
+    '''
+    The enemy
+    '''
     speed = NumericProperty(4)
     # color must set default as a list of 3 elements!
     color = ListProperty([0, 0, 0])
@@ -24,6 +29,9 @@ class Ghost(Widget):
         super(Ghost, self).__init__(**kwargs)
 
 class StartWidget(Widget):
+    '''
+    Put pictures, graphs, reactive in the keyboard input
+    '''
     hero = ObjectProperty()
     gred = ObjectProperty()
     gpink = ObjectProperty()
@@ -46,7 +54,11 @@ class StartWidget(Widget):
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         if text == ' ':
             # start the game
+            print 'before start, remove current schedule'
+            Clock.unschedule(sm.current_screen.widget.update)
             print "start the game"
+            sm.current = "play"
+            Clock.schedule_interval(sm.current_screen.widget.update, 1)
         return True
 
     def draw_one_dot(self, left, bottom, is_super):
@@ -80,14 +92,16 @@ class StartWidget(Widget):
             Triangle(points=(580, 350, 560, 360, 560, 340))
 
     def update(self, dt=0):
+        print 'update border & arrow'
         self.draw_border()
         self.draw_arrow()
 
 class PlayWidget(Widget):
-
+    '''
+    Draw map, roles, scores etc.
+    '''
     def update(self, dt=0):
-        print self
-        #self.draw_()
+        print 'update play screen'
 
 class StartScreen(Screen):
     widget = ObjectProperty()
@@ -103,15 +117,15 @@ class PlayScreen(Screen):
 class PacManApp(App):
 
     def build(self):
-        sm = ScreenManager()
         sm.add_widget(StartScreen(name="start"))
         sm.add_widget(PlayScreen(name="play"))
 
-        sm.current_screen.widget.update()
-        #Clock.schedule_interval(sm.current_screen.widget.update, 5)
+        Clock.schedule_interval(sm.current_screen.widget.update, 3)
         return sm
 
 if __name__ == '__main__':
+    from kivy.config import Config
     Config.set('graphics', 'height', 720)
     Config.set('graphics', 'width', 1280)
+    sm = ScreenManager(transition=WipeTransition())
     PacManApp().run()
