@@ -49,7 +49,7 @@
             size: 4, 4
 
 
-<StartScreen>:
+<StartWidget>:
     size: 1280, 720
 
     hero: id_hero
@@ -69,48 +69,69 @@
     Ghost:
         id: id_red_ghost
         color: 1, 0, 0
-        center_x: root.center_x - 2 * tile_size
+        center_x: self.parent.center_x - 2 * tile_size
         center_y: 9.5 * tile_size
 
     Ghost:
         id: id_pink_ghost
         color: 1, 0.5, 0.5
-        center_x: root.center_x - 2 * tile_size * 2
+        center_x: self.parent.center_x - 2 * tile_size * 2
         center_y: 9.5 * tile_size
 
     Ghost:
         id: id_blue_ghost
         color: 0, 0.88, 1
-        center_x: root.center_x + 2 * tile_size
+        center_x: self.parent.center_x + 2 * tile_size
         center_y: 9.5 * tile_size
 
     Ghost:
         id: id_oran_ghost
         color: 1, 0.5, 0
-        center_x: root.center_x + 2 * tile_size * 2
+        center_x: self.parent.center_x + 2 * tile_size * 2
         center_y: 9.5 * tile_size
 
     Image:
         source: "img/pacpac_logo.png"
         size: 990, 200
-        y: root.top - 100 - self.height
+        y: self.parent.top - 100 - self.height
         center_x: root.center_x
 
     Image:
         source: "img/arrow_keys.png"
         size: 200, 128
-        center_x: root.center_x
+        center_x: self.parent.center_x
         y: 80
 
     Label:
         font_name: "8bitoperator_jve.ttf"
         font_size: 16
         text: "Controls"
-        center_x: root.center_x
+        center_x: self.parent.center_x
 
     Label:
         font_name: "8bitoperator_jve.ttf"
         font_size: 32
         text: "Start"
-        center_x: root.center_x
+        center_x: self.parent.center_x
         center_y: 12.5 * tile_size
+
+<PlayWidget>:
+
+    Label:
+        font_name: "8bitoperator_jve.ttf"
+        font_size: 32
+        text: "Hahahahahahahah"
+        center_x: root.center_x
+        center_y: root.center_y
+
+<StartScreen>:
+    widget: start
+
+    StartWidget:
+        id: start
+
+<PlayScreen>:
+    widget: play
+
+    PlayWidget:
+        id: play

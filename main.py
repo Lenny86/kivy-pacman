@@ -7,6 +7,7 @@ from kivy.properties import NumericProperty, ListProperty, \
 from kivy.graphics import Color, Ellipse, Rectangle, Triangle
 from kivy.config import Config
 from kivy.clock import Clock
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 # define again in kv file, search and fix it
 tile_size = 28.0
@@ -22,7 +23,7 @@ class Ghost(Widget):
     def __init__(self, **kwargs):
         super(Ghost, self).__init__(**kwargs)
 
-class StartScreen(Widget):
+class StartWidget(Widget):
     hero = ObjectProperty()
     gred = ObjectProperty()
     gpink = ObjectProperty()
@@ -31,9 +32,7 @@ class StartScreen(Widget):
     characters = ReferenceListProperty(gred, gpink, hero, gblue, goran)
 
     def __init__(self, **kwargs):
-        super(StartScreen, self).__init__(**kwargs)
-        self.tile_w = int(math.floor(self.width / tile_size))
-        self.tile_h = int(math.floor(self.height/ tile_size))
+        super(StartWidget, self).__init__(**kwargs)
 
         # import window after config.set takes effect
         from kivy.core.window import Window
@@ -47,7 +46,7 @@ class StartScreen(Widget):
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         if text == ' ':
             # start the game
-            pass
+            print "start the game"
         return True
 
     def draw_one_dot(self, left, bottom, is_super):
@@ -62,6 +61,10 @@ class StartScreen(Widget):
             Ellipse(pos = (x, y), size = (dot_size, dot_size))
 
     def draw_border(self):
+        # when __init__ called, the width/height is still default
+        # value, which is (100, 100), so let's add tile w/h here
+        self.tile_w = int(math.floor(self.width / tile_size))
+        self.tile_h = int(math.floor(self.height/ tile_size))
         superdots = ((0, 0), (0, self.tile_h - 1), (self.tile_w - 1, 0), \
                 (self.tile_w - 1, self.tile_h - 1))
         for x in range(self.tile_w):
@@ -80,16 +83,33 @@ class StartScreen(Widget):
         self.draw_border()
         self.draw_arrow()
 
-class PlayScreen(Widget):
-    pass
+class PlayWidget(Widget):
+
+    def update(self, dt=0):
+        print self
+        #self.draw_()
+
+class StartScreen(Screen):
+    widget = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(StartScreen, self).__init__(**kwargs)
+        # the layout size is (1, 1)
+        # print self.width, self.height
+
+class PlayScreen(Screen):
+    widget = ObjectProperty()
 
 class PacManApp(App):
 
     def build(self):
-        ss = StartScreen()
-        ss.update()
-        #Clock.schedule_interval(ss.update, 1 / 60.0)
-        return ss
+        sm = ScreenManager()
+        sm.add_widget(StartScreen(name="start"))
+        sm.add_widget(PlayScreen(name="play"))
+
+        sm.current_screen.widget.update()
+        #Clock.schedule_interval(sm.current_screen.widget.update, 5)
+        return sm
 
 if __name__ == '__main__':
     Config.set('graphics', 'height', 720)
