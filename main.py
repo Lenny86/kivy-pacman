@@ -100,8 +100,12 @@ class PlayWidget(Widget):
     '''
     Draw map, roles, scores etc.
     '''
+    hi_score = NumericProperty(0)
+    score = NumericProperty(0)
+
     def update(self, dt=0):
-        print 'update play screen'
+        pass
+        #print 'update play screen'
 
 class StartScreen(Screen):
     widget = ObjectProperty()

@@ -115,14 +115,74 @@
         center_x: self.parent.center_x
         center_y: 12.5 * tile_size
 
+
 <PlayWidget>:
+    size: 1280, 720
+
+#    hero: id_hero
+#    gred: id_red_ghost
+
+    Hero:
+        id: id_hero
+        center_x: self.parent.center_x
+        center_y: 9.5 * tile_size
+
+    Hero:
+        id: id_life1
+        center_x: tile_size
+        center_y: tile_size
+
+    Hero:
+        id: id_life2
+        center_x: 2 * tile_size
+        center_y: tile_size
+#
+#    Ghost:
+#        id: id_red_ghost
+#        color: 1, 0, 0
+#        center_x: self.parent.center_x - 2 * tile_size
+#        center_y: 9.5 * tile_size
+#
+#    Ghost:
+#        id: id_pink_ghost
+#        color: 1, 0.5, 0.5
+#        center_x: self.parent.center_x - 2 * tile_size * 2
+#        center_y: 9.5 * tile_size
+#
+#    Ghost:
+#        id: id_blue_ghost
+#        color: 0, 0.88, 1
+#        center_x: self.parent.center_x + 2 * tile_size
+#        center_y: 9.5 * tile_size
+#
+#    Ghost:
+#        id: id_oran_ghost
+#        color: 1, 0.5, 0
+#        center_x: self.parent.center_x + 2 * tile_size * 2
+#        center_y: 9.5 * tile_size
 
     Label:
         font_name: "8bitoperator_jve.ttf"
         font_size: 32
-        text: "Hahahahahahahah"
-        center_x: root.center_x
-        center_y: root.center_y
+        text: str(self.parent.score)
+        halign: "right"
+        center_x: 20 * tile_size
+        center_y: tile_size
+
+    Label:
+        font_name: "8bitoperator_jve.ttf"
+        font_size: 32
+        text: str(self.parent.hi_score)
+        halign: "right"
+        center_x: 20 * tile_size
+        center_y: self.parent.top - 10
+
+    Label:
+        font_name: "8bitoperator_jve.ttf"
+        font_size: 32
+        text: "High Score"
+        center_x: 80
+        center_y: self.parent.top - 10
 
 <StartScreen>:
     widget: start
